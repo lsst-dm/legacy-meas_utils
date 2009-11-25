@@ -5,14 +5,14 @@
 import os.path, re, os
 import lsst.SConsUtils as scons
 
-env = scons.makeEnv("meas_pipeline",
-                    r"$HeadURL: svn+ssh://svn.lsstcorp.org/DMS/meas/pipeline/trunk/SConstruct $",
+env = scons.makeEnv("meas_utils",
+                    r"$HeadURL$",
                     []
                     )
 #
 # Build/install things
 #
-for d in Split("doc tests python/lsst/meas/pipeline"):
+for d in Split("doc tests python/lsst/meas/utils"):
     SConscript(os.path.join(d, "SConscript"))
 
 env['IgnoreFiles'] = r"(~$|\.pyc$|^\.svn$|\.o$)"
