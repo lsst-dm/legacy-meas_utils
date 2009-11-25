@@ -1,0 +1,28 @@
+file python/lsst/SConsUtils.py,line 378:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking if  CC is really gcc...
+scons: Configure: ".sconf_temp/conftest_0" is up to date.
+scons: Configure: The original builder output was:
+  |gcc --help | grep gcc
+  |
+scons: Configure: (cached) yes
+
+
+file python/lsst/SConsUtils.py,line 405:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for C++ header file tr1/unordered_map... 
+scons: Configure: ".sconf_temp/conftest_1.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_1.cpp <-
+  |  |
+  |  |#include <tr1/unordered_map>
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_1.o" is up to date.
+scons: Configure: The original builder output was:
+  |g++ -o .sconf_temp/conftest_1.o -c -g -Wall -O0 .sconf_temp/conftest_1.cpp
+  |
+scons: Configure: (cached) yes
+
+
