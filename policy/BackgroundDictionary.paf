@@ -1,5 +1,7 @@
 #<?cfg paf dictionary ?>
 
+target: backgroundPolicy
+
 definitions: {
     binsize: {
         type: "int"
