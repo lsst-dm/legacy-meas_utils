@@ -70,9 +70,9 @@ class SourceMeasurementTestCase(unittest.TestCase):
         )
         fpList = []
         if dsPositive:
-            fpList.append(dsPositive.getFootprints())
+            fpList.append([dsPositive.getFootprints(), True])
         if dsNegative:
-            fpList.append(dsNegative.getFootprints())
+            fpList.append([dsNegative.getFootprints(), False])
         
         sourceMeasurement.sourceMeasurement(bckSubExp, psf, fpList, self.moPolicy)
         del exposure

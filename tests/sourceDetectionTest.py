@@ -7,7 +7,6 @@ Run with:
 import sys, os, math
 from math import *
 
-import pdb
 import unittest
 
 import eups
