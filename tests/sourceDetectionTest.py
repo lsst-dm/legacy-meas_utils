@@ -35,7 +35,6 @@ class DetectTestCase(unittest.TestCase):
         )
 
     def tearDown(self):
-        del self.exposure        
         del self.psfPolicy
         del self.detPolicy
         del self.bckPolicy
@@ -55,15 +54,6 @@ class DetectTestCase(unittest.TestCase):
             bckSubExp, psf, self.detPolicy
         )
         assert(not (dsPositive is None and dsNegative is None))
-        del exposure
-        del bbox
-        del psf
-        del bck
-        del bckSubExp
-        if not (dsPositive is None):
-            del dsPositive
-        if not (dsNegative is None):
-            del dsNegative
 
 def suite():
     """Returns a suite containing all the test cases in this module."""
