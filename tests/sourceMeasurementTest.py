@@ -67,7 +67,7 @@ class SourceMeasurementTestCase(unittest.TestCase):
         )
         self.moPolicy = pexPolicy.Policy.createPolicy(
             pexPolicy.DefaultPolicyFile(
-                "meas_utils", "MeasureSourcesDictionary.paf", "policy"
+                "meas_utils", "MeasureSources.paf", "tests"
             )
         )
 
