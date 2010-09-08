@@ -41,7 +41,8 @@ import lsst.pex.policy as pexPolicy
 import lsst.meas.utils.sourceDetection as sourceDetection
 import lsst.meas.utils.sourceMeasurement as sourceMeasurement
 import lsst.afw.image as afwImage
-
+import lsst.afw.coord as afwCoord
+import lsst.afw.geom as afwGeom
 import lsst.afw.display.ds9 as ds9
 
 try:
@@ -97,11 +98,14 @@ class SourceMeasurementTestCase(unittest.TestCase):
         if dsNegative:
             fpList.append([dsNegative.getFootprints(), False])
         
-        sourceMeasurement.sourceMeasurement(bckSubExp, psf, fpList, self.moPolicy)
+        sourceSet = sourceMeasurement.sourceMeasurement(bckSubExp, psf, fpList, self.moPolicy)
+        sourceMeasurement.computeSkyCoords(bckSubExp.getWcs(), sourceSet)
+
         del exposure
         del bckSubExp
         del psf
-       
+        del sourceSet
+
 def suite():
     """Returns a suite containing all the test cases in this module."""
 
