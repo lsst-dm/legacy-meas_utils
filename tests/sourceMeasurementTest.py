@@ -99,7 +99,6 @@ class SourceMeasurementTestCase(unittest.TestCase):
             fpList.append([dsNegative.getFootprints(), False])
         
         sourceSet = sourceMeasurement.sourceMeasurement(bckSubExp, psf, fpList, self.moPolicy)
-        sourceMeasurement.computeSkyCoords(bckSubExp.getWcs(), sourceSet)
 
         del exposure
         del bckSubExp
