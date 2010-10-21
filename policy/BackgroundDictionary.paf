@@ -59,6 +59,9 @@ definitions: {
             value: "NATURAL_SPLINE"
         }
         allowed: {
+            value: "AKIMA_SPLINE"
+        }
+        allowed: {
             value: "NONE"
             description: "No background estimation is to be attempted"
         }
