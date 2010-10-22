@@ -2,6 +2,8 @@ setupRequired(afw >= 4.1.0.0)
 setupRequired(meas_algorithms >= 4.1.0.0)
 setupRequired(skypix >= 3.0.3)
 setupRequired(geom >= 4.1.0.0)
+setupRequired(meas_multifitData >= 4.1.0.0)
+setupRequired(meas_multifit>=4.1.0.0)
 
 envAppend(LD_LIBRARY_PATH, ${PRODUCT_DIR}/lib)
 envAppend(DYLD_LIBRARY_PATH, ${PRODUCT_DIR}/lib)
