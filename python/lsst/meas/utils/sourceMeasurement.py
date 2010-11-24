@@ -35,6 +35,8 @@ def sourceMeasurement(
     psf,                      # psf
     footprintLists,           # footprints of the detected objects
     measSourcePolicy,         # measureSources policy
+    sourceIdStart = 0,        # first source ID to assign
+    maxSources = 0            # maximum number of sources to produce
     ):
     """ Source Measurement """
 
@@ -52,6 +54,12 @@ def sourceMeasurement(
         frame = 0
         ds9.mtv(exposure, title="input", frame=frame)
 
+    # prevent shooting self in foot
+    if sourceIdStart is None:
+        sourceIdStart = 0
+    if maxSources is None:
+        maxSources = 0
+
     # instantiate a measurement object for 
     # - instantiation only involves looking up the algorithms for centroid, shape, and photometry
     #   ... nothing actually gets measured yet.
@@ -64,13 +72,22 @@ def sourceMeasurement(
     for footprintList in footprintLists:
         footprints, isNegative = footprintList
 
+        if maxSources and len(footprints) > maxSources:
+            self.log.log(Log.WARN, 'Number of detected footprints (%i) is greater than the maximum number of sources (%i): will ignore some detections!' %
+                         (len(footprints), maxSources))
+            footprints = footprints[:maxSources]
+
         # loop over all the objects detected
         for i in range(len(footprints)):
 
             # create a new source, and add it to the list, initialize ...
+            #source = afwDetection.Source(sourceIdStart + i)
             source = afwDetection.Source()
+            source.setId(sourceIdStart + i)
+            if sourceIdStart:
+                source.lockSourceId()
+
             sourceSet.append(source)
-            source.setId(i)
 
             source.setFlagForDetection(source.getFlagForDetection() | measAlg.Flags.BINNED1);
 
