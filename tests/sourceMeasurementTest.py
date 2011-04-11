@@ -82,8 +82,8 @@ class SourceMeasurementTestCase(unittest.TestCase):
         filename = os.path.join(
             eups.productDir("afwdata"), "CFHT", "D4", "cal-53535-i-797722_1"
         )
-        bbox = afwImage.BBox(afwImage.PointI(32,32), 512, 512)
-        exposure =  afwImage.ExposureF(filename, 0, bbox)
+        bbox = afwGeom.Box2I(afwGeom.Point2I(32, 32), afwGeom.Extent2I(512, 512))
+        exposure =  afwImage.ExposureF(filename, 0, bbox, afwImage.LOCAL)
         psf = sourceDetection.makePsf(self.psfPolicy)
        
         bck, bckSubExp = sourceDetection.estimateBackground(
