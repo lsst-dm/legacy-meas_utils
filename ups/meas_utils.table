@@ -1,5 +1,5 @@
-setupRequired(afw >= 4.1.0.0)
-setupRequired(meas_algorithms >= 4.1.0.0)
+setupRequired(afw >= 4.1.1.0)
+setupRequired(meas_algorithms >= 4.1.1.0)
 setupRequired(meas_multifitData >= 4.1.0.1)
 setupOptional(meas_multifit >= 4.1.0.1)
 
