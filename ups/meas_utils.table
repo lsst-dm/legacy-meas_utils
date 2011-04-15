@@ -1,7 +1,7 @@
-setupRequired(afw >= 4.1.0.0)
-setupRequired(meas_algorithms >= 4.1.0.0)
-setupRequired(meas_multifitData >= 4.1.0.1)
-setupOptional(meas_multifit >= 4.1.0.1)
+setupRequired(afw >= 4.3.2.0)
+setupRequired(meas_algorithms >= 4.3.1.0)
+# setupRequired(meas_multifitData >= 4.1.0.1)
+# setupOptional(meas_multifit >= 4.1.0.1)
 
 envAppend(LD_LIBRARY_PATH, ${PRODUCT_DIR}/lib)
 envAppend(DYLD_LIBRARY_PATH, ${PRODUCT_DIR}/lib)
