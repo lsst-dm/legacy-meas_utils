@@ -84,7 +84,7 @@ def estimateBackground(exposure, backgroundPolicy, subtract=True):
     If subtract is true, make a copy of the exposure and subtract the background.  
     Return background, backgroundSubtractedExposure
     """
-    displayEstimateBackground = lsstDebug.Info(__name__).displayEstimateBackground
+    displayBackground = lsstDebug.Info(__name__).displayBackground
 
     maskedImage = exposure.getMaskedImage()
     image = maskedImage.getImage()    
@@ -93,7 +93,7 @@ def estimateBackground(exposure, backgroundPolicy, subtract=True):
     if not background:
         raise RuntimeError, "Unable to estimate background for exposure"
     
-    if displayEstimateBackground > 1:
+    if displayBackground > 1:
         ds9.mtv(background.getImageF(), title="background", frame=1)
 
     if not subtract:
@@ -104,21 +104,31 @@ def estimateBackground(exposure, backgroundPolicy, subtract=True):
     copyImage = backgroundSubtractedExposure.getMaskedImage().getImage()
     copyImage -= background.getImageF()
 
-    if displayEstimateBackground:
+    if displayBackground:
         ds9.mtv(backgroundSubtractedExposure, title="subtracted")
 
     return background, backgroundSubtractedExposure
 
-def detectSources(exposure, psf, detectionPolicy):
-    try:
-        import lsstDebug
+def setEdgeBits(maskedImage, goodBBox, edgeBitmask):
+    """Set the edgeBitmask bits for all of maskedImage outside goodBBox"""
+    msk = maskedImage.getMask()
 
-        display = lsstDebug.Info(__name__).display
-    except ImportError, e:
-        try:
-            display
-        except NameError:
-            display = False
+    for x0, y0, w, h in ([0, 0,
+                          msk.getWidth(), goodBBox.getBeginY()],
+                         [0, goodBBox.getEndY(), msk.getWidth(),
+                          maskedImage.getHeight() - goodBBox.getEndY()],
+                         [0, 0,
+                          goodBBox.getBeginX(), msk.getHeight()],
+                         [goodBBox.getEndX(), 0,
+                          maskedImage.getWidth() - goodBBox.getEndX(), msk.getHeight()],
+                         ):
+        edgeMask = msk.Factory(msk, afwGeom.BoxI(afwGeom.PointI(x0, y0),
+                                                 afwGeom.ExtentI(w, h)), afwImage.LOCAL)
+        edgeMask |= edgeBitmask
+
+def detectSources(exposure, psf, detectionPolicy):
+    import lsstDebug
+    display = lsstDebug.Info(__name__).display
 
     minPixels = detectionPolicy.get("minPixels")
     
@@ -170,8 +180,12 @@ def detectSources(exposure, psf, detectionPolicy):
         #
         # Only search psf-smooth part of frame
         #
-        goodBBox = gaussKernel.shrinkBBox(convolvedImage.getBBox(afwImage.PARENT))
-        middle = convolvedImage.Factory(convolvedImage, goodBBox, afwImage.PARENT, False)
+        goodBBox = gaussKernel.shrinkBBox(convolvedImage.getBBox(afwImage.LOCAL))
+        middle = convolvedImage.Factory(convolvedImage, goodBBox, afwImage.LOCAL, False)
+        #
+        # Mark the parts of the image outside goodBBox as EDGE
+        #
+        setEdgeBits(maskedImage, goodBBox, maskedImage.getMask().getPlaneBitMask("EDGE"))
 
     dsPositive = None
     if thresholdPolarity != "negative":
