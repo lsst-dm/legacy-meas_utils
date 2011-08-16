@@ -43,6 +43,10 @@ definitions:{
             description: "threshold applied to image std deviation"
         }
         allowed: {
+            value: "pixel_stdev"
+            description: "threshold applied to per-pixel image std deviation"
+        }
+        allowed: {
             value: "value"
             description: "threshold applied to image value"
         }
