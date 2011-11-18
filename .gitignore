@@ -1,18 +1,8 @@
-
-# /
-/.sconsign.dblite
-/.sconf_temp
-/config.log
-
-# /doc/
-/doc/htmlDir
-
-# /python/lsst/meas/
-/python/lsst/meas/*.pyc
-
-# /python/lsst/meas/utils/
-/python/lsst/meas/utils/*.pyc
-
-# /tests/
-/tests/.tests
-/tests/*.pyc
+*.pyc
+.sconf_temp
+.sconsign.dblite
+config.log
+doc/htmlDir
+python/lsst/meas/utils/version.py
+tests/.tests
+ups/*.cfgc
