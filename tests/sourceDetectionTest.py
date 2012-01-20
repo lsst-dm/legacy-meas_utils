@@ -50,17 +50,13 @@ class DetectTestCase(unittest.TestCase):
         self.psfPolicy = pexPolicy.Policy.createPolicy(
             pexPolicy.DefaultPolicyFile("meas_utils", "PsfDictionary.paf", "policy")
         )
-        self.detPolicy = pexPolicy.Policy.createPolicy(
-            pexPolicy.DefaultPolicyFile("meas_utils", "DetectionDictionary.paf", "policy")
-        )
-        self.bckPolicy = pexPolicy.Policy.createPolicy(
-            pexPolicy.DefaultPolicyFile("meas_utils", "BackgroundDictionary.paf", "policy")
-        )
+        self.detConfig = sourceDetection.DetectionConfig()
+        self.bckConfig = sourceDetection.BackgroundConfig()
 
     def tearDown(self):
         del self.psfPolicy
-        del self.detPolicy
-        del self.bckPolicy
+        del self.detConfig
+        del self.bckConfig
 
     def testDetection(self):
         filename = os.path.join(eups.productDir("afwdata"),
@@ -71,10 +67,10 @@ class DetectTestCase(unittest.TestCase):
         psf = sourceDetection.makePsf(self.psfPolicy)
        
         bck, bckSubExp = sourceDetection.estimateBackground(
-            exposure, self.bckPolicy, True
+            exposure, self.bckConfig, True
         )
         dsPositive, dsNegative = sourceDetection.detectSources(
-            bckSubExp, psf, self.detPolicy
+            bckSubExp, psf, self.detConfig
         )
         assert(not (dsPositive is None and dsNegative is None))
 

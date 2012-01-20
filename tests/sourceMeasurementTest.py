@@ -38,6 +38,7 @@ import time
 import eups
 import lsst.utils.tests as utilsTests
 import lsst.pex.policy as pexPolicy
+import lsst.pex.config as pexConf
 import lsst.meas.utils.sourceDetection as sourceDetection
 import lsst.meas.utils.sourceMeasurement as sourceMeasurement
 import lsst.afw.image as afwImage
@@ -60,23 +61,15 @@ class SourceMeasurementTestCase(unittest.TestCase):
         self.psfPolicy = pexPolicy.Policy.createPolicy(
             pexPolicy.DefaultPolicyFile("meas_utils", "PsfDictionary.paf", "policy")
         )
-        self.detPolicy = pexPolicy.Policy.createPolicy(
-            pexPolicy.DefaultPolicyFile("meas_utils", "DetectionDictionary.paf", "policy")
-        )
-        self.bckPolicy = pexPolicy.Policy.createPolicy(
-            pexPolicy.DefaultPolicyFile("meas_utils", "BackgroundDictionary.paf", "policy")
-        )
-        self.moPolicy = pexPolicy.Policy.createPolicy(
-            pexPolicy.DefaultPolicyFile(
-                "meas_utils", "MeasureSources.paf", "tests"
-            )
-        )
+        self.detConfig = sourceDetection.DetectionConfig()
+        self.bckConfig = sourceDetection.BackgroundConfig()
+        self.moConfig = pexConf.Config.load("tests/config/MeasureSources.py")
 
     def tearDown(self):
         del self.psfPolicy
-        del self.bckPolicy
-        del self.detPolicy
-        del self.moPolicy
+        del self.bckConfig
+        del self.detConfig
+        del self.moConfig
 
     def testSingleInputExposure(self):
         filename = os.path.join(
@@ -87,10 +80,10 @@ class SourceMeasurementTestCase(unittest.TestCase):
         psf = sourceDetection.makePsf(self.psfPolicy)
        
         bck, bckSubExp = sourceDetection.estimateBackground(
-            exposure, self.bckPolicy, True
+            exposure, self.bckConfig, True
         )
         dsPositive, dsNegative = sourceDetection.detectSources(
-            bckSubExp, psf, self.detPolicy
+            bckSubExp, psf, self.detConfig
         )
         fpList = []
         if dsPositive:
@@ -98,7 +91,7 @@ class SourceMeasurementTestCase(unittest.TestCase):
         if dsNegative:
             fpList.append([dsNegative.getFootprints(), False])
         
-        sourceSet = sourceMeasurement.sourceMeasurement(bckSubExp, psf, fpList, self.moPolicy)
+        sourceSet = sourceMeasurement.sourceMeasurement(bckSubExp, psf, fpList, self.moConfig)
 
         del exposure
         del bckSubExp
