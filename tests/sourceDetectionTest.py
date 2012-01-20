@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 # 
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
@@ -21,21 +20,12 @@
 # the GNU General Public License along with this program.  If not, 
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-
-"""
-Run with:
-   python DetectTest.py
-"""
-
-import sys, os, math
-from math import *
-
+import sys
+import os
 import unittest
 
 import eups
 import lsst.utils.tests as utilsTests
-import lsst.pex.policy as pexPolicy
-from lsst.pex.logging import Trace
 import lsst.afw.detection as afwDet
 import lsst.afw.geom as afwGeom
 import lsst.afw.image as afwImage
@@ -47,14 +37,12 @@ class DetectTestCase(unittest.TestCase):
     """A test case for sourceDetection.py"""
 
     def setUp(self):
-        self.psfPolicy = pexPolicy.Policy.createPolicy(
-            pexPolicy.DefaultPolicyFile("meas_utils", "PsfDictionary.paf", "policy")
-        )
+        self.psfConfig = sourceDetection.makePsf.ConfigClass()
         self.detConfig = sourceDetection.DetectionConfig()
         self.bckConfig = sourceDetection.BackgroundConfig()
 
     def tearDown(self):
-        del self.psfPolicy
+        del self.psfConfig
         del self.detConfig
         del self.bckConfig
 
@@ -64,7 +52,7 @@ class DetectTestCase(unittest.TestCase):
                                 "cal-53535-i-797722_1")
         bbox = afwGeom.Box2I(afwGeom.Point2I(32, 32), afwGeom.Extent2I(512, 512))
         exposure = afwImage.ExposureF(filename, 0, bbox, afwImage.LOCAL)        
-        psf = sourceDetection.makePsf(self.psfPolicy)
+        psf = sourceDetection.makePsf(self.psfConfig)
        
         bck, bckSubExp = sourceDetection.estimateBackground(
             exposure, self.bckConfig, True
@@ -72,7 +60,7 @@ class DetectTestCase(unittest.TestCase):
         dsPositive, dsNegative = sourceDetection.detectSources(
             bckSubExp, psf, self.detConfig
         )
-        assert(not (dsPositive is None and dsNegative is None))
+        self.assertFalse(dsPositive is None and dsNegative is None)
 
 def suite():
     """Returns a suite containing all the test cases in this module."""

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 # 
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
@@ -21,30 +20,17 @@
 # the GNU General Public License along with this program.  If not, 
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-
-"""
-Run with:
-   python MeasureTest.py
-"""
-
-import sys, os, math
-from math import *
-
-import pdb
+import sys
+import os
 import unittest
-import random
-import time
 
 import eups
 import lsst.utils.tests as utilsTests
-import lsst.pex.policy as pexPolicy
 import lsst.pex.config as pexConf
 import lsst.meas.utils.sourceDetection as sourceDetection
 import lsst.meas.utils.sourceMeasurement as sourceMeasurement
 import lsst.afw.image as afwImage
-import lsst.afw.coord as afwCoord
 import lsst.afw.geom as afwGeom
-import lsst.afw.display.ds9 as ds9
 
 try:
     type(display)
@@ -58,15 +44,13 @@ class SourceMeasurementTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        self.psfPolicy = pexPolicy.Policy.createPolicy(
-            pexPolicy.DefaultPolicyFile("meas_utils", "PsfDictionary.paf", "policy")
-        )
+        self.psfConfig = sourceDetection.makePsf.ConfigClass()
         self.detConfig = sourceDetection.DetectionConfig()
         self.bckConfig = sourceDetection.BackgroundConfig()
         self.moConfig = pexConf.Config.load("tests/config/MeasureSources.py")
 
     def tearDown(self):
-        del self.psfPolicy
+        del self.psfConfig
         del self.bckConfig
         del self.detConfig
         del self.moConfig
@@ -77,7 +61,7 @@ class SourceMeasurementTestCase(unittest.TestCase):
         )
         bbox = afwGeom.Box2I(afwGeom.Point2I(32, 32), afwGeom.Extent2I(512, 512))
         exposure =  afwImage.ExposureF(filename, 0, bbox, afwImage.LOCAL)
-        psf = sourceDetection.makePsf(self.psfPolicy)
+        psf = sourceDetection.makePsf(self.psfConfig)
        
         bck, bckSubExp = sourceDetection.estimateBackground(
             exposure, self.bckConfig, True
