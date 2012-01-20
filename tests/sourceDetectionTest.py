@@ -38,8 +38,8 @@ class DetectTestCase(unittest.TestCase):
 
     def setUp(self):
         self.psfConfig = sourceDetection.makePsf.ConfigClass()
-        self.detConfig = sourceDetection.DetectionConfig()
-        self.bckConfig = sourceDetection.BackgroundConfig()
+        self.detConfig = sourceDetection.detectSources.ConfigClass()
+        self.bckConfig = sourceDetection.estimateBackground.ConfigClass()
 
     def tearDown(self):
         del self.psfConfig
