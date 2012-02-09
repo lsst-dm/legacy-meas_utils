@@ -47,7 +47,8 @@ class SourceMeasurementTestCase(unittest.TestCase):
         self.psfConfig = sourceDetection.makePsf.ConfigClass()
         self.detConfig = sourceDetection.detectSources.ConfigClass()
         self.bckConfig = sourceDetection.estimateBackground.ConfigClass()
-        self.moConfig = pexConf.Config.load("tests/config/MeasureSources.py")
+        self.moConfig = measAlg.MeasureSourcesConfig()
+        self.moConfig.load("tests/config/MeasureSources.py")
 
     def tearDown(self):
         del self.psfConfig
