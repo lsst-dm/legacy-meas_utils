@@ -27,6 +27,7 @@ import unittest
 import eups
 import lsst.utils.tests as utilsTests
 import lsst.pex.config as pexConf
+import lsst.meas.algorithms as measAlg
 import lsst.meas.utils.sourceDetection as sourceDetection
 import lsst.meas.utils.sourceMeasurement as sourceMeasurement
 import lsst.afw.image as afwImage
