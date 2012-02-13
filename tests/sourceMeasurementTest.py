@@ -31,6 +31,7 @@ import lsst.meas.utils.sourceDetection as sourceDetection
 import lsst.meas.utils.sourceMeasurement as sourceMeasurement
 import lsst.afw.image as afwImage
 import lsst.afw.geom as afwGeom
+import lsst.meas.algorithms as measAlg
 
 try:
     type(display)
@@ -47,7 +48,8 @@ class SourceMeasurementTestCase(unittest.TestCase):
         self.psfConfig = sourceDetection.makePsf.ConfigClass()
         self.detConfig = sourceDetection.detectSources.ConfigClass()
         self.bckConfig = sourceDetection.estimateBackground.ConfigClass()
-        self.moConfig  = sourceDetection.MeasureSourcesConfig().load("tests/config/MeasureSources.py")
+        self.moConfig  = measAlg.MeasureSourcesConfig()
+        self.moConfig.load("tests/config/MeasureSources.py")
 
     def tearDown(self):
         del self.psfConfig
@@ -74,7 +76,7 @@ class SourceMeasurementTestCase(unittest.TestCase):
             fpList.append([dsPositive.getFootprints(), True])
         if dsNegative:
             fpList.append([dsNegative.getFootprints(), False])
-        
+
         sourceSet = sourceMeasurement.sourceMeasurement(bckSubExp, psf, fpList, self.moConfig)
 
         del exposure
