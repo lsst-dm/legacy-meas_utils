@@ -1,6 +1,3 @@
-import lsst.meas.algorithms as measAlg
-
-root = measAlg.MeasureSourcesConfig()
 root.source.astrom = "SDSS"
 root.source.apFlux = "NAIVE"
 root.source.psfFlux = "PSF"
